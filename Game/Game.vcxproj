@@ -163,7 +163,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DemoLevel.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestActor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DemoLevel.h" />
+    <ClInclude Include="TestActor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
