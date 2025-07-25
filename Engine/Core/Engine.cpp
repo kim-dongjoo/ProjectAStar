@@ -1,14 +1,25 @@
 #include "Engine.h"
 #include <iostream>
 #include "../Level//Level.h"
+#include <Windows.h>
 
 // 윈도우즈
 // 단순 입력 처리(키보드)
 //
 
+Engine* Engine::instance = nullptr;
 
 Engine::Engine()
 {
+	instance = this;
+
+	CONSOLE_CURSOR_INFO info;
+	info.bVisible = false;
+	info.dwSize = 1;
+
+	//콘솔 커서 끄기
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &info);
+
 }
 
 Engine::~Engine()
@@ -71,6 +82,13 @@ void Engine::Run()
 			}
 		}
 	}
+
+	// 텍스트 색상 다시 흰색으로 설정
+	SetConsoleTextAttribute(
+		GetStdHandle(STD_OUTPUT_HANDLE), 
+		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
+		);
+
 }
 
 void Engine::AddLevel(Level* newLevel)
@@ -101,6 +119,11 @@ bool Engine::GetKeyUp(int keyCode)
 void Engine::Quit()
 {
 	isQuit = true;
+}
+
+Engine& Engine::GetEngine()
+{
+	return *instance;
 }
 
 void Engine::ProcessInput()
@@ -137,11 +160,16 @@ void Engine::Tick(float deltaTime)
 		mainLevel->Tick(deltaTime);
 	}
 
-	if (GetKeyDown(VK_ESCAPE)) { Quit(); }
+	// if (GetKeyDown(VK_ESCAPE)) { Quit(); }
 }
 
 void Engine::Render()
 {
+	SetConsoleTextAttribute(
+		GetStdHandle(STD_OUTPUT_HANDLE),
+		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
+	);
+
 	if (mainLevel)
 	{
 		mainLevel->Render();

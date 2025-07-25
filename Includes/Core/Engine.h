@@ -4,8 +4,7 @@
 #include <Windows.h>
 
 /*
-* TODO :  2025년 7월 24일
-	- RTTI 적용
+* TODO :  2025년 7월 25일
 	- Engine 싱글톤(Singleton) 구현
 * 
 */
@@ -43,6 +42,9 @@ public:
 	// 엔진 종료 함수
 	void Quit();
 
+	// 싱글톤 접근 함수
+	static Engine& GetEngine();
+
 private:
 	void ProcessInput();
 	void BeginPlay();
@@ -58,5 +60,9 @@ private:
 
 	// 메인 레벨
 	Level* mainLevel = nullptr;
+
+	// 싱글톤 변수
+	static Engine* instance;
+
 };
 
