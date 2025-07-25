@@ -3,7 +3,8 @@
 
 void TestActor::Tick(float deltaTime)
 {
-	Actor::Tick(deltaTime);
+	// Actor::Tick(deltaTime);
+	super::Tick(deltaTime);
 
 	std::cout 
 		<< "TestACtor::Tick. FPS: "

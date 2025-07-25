@@ -2,11 +2,14 @@
 
 #include "Core.h"
 #include <vector>
+#include "RTTI.h"
 
 class Actor;
 
-class Engine_API Level
+class Engine_API Level : public RTTI
 {
+	RTTI_DECLARATIONS(Level, RTTI)
+
 public:
 	Level();
 	~Level();

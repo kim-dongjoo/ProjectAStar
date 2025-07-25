@@ -2,13 +2,16 @@
 
 #include "Core.h"
 #include "../Math/Vector2.h"
+#include "RTTI.h"
 
 // 위치
 // 그리기
 // 엔진의 이벤트 함수 호출(BeginPlay/Tick/Draw)
 
-class Engine_API Actor
+class Engine_API Actor : public RTTI
 {
+	RTTI_DECLARATIONS(Actor, RTTI)
+
 public:
 	Actor();
 	virtual ~Actor();
