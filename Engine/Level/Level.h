@@ -22,6 +22,9 @@ public:
 	virtual void Render();
 
 private:
+	void SortActorsByRenderSortingOrder();
+
+private:
 	std::vector<Actor*> actors;
 
 

@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;$(ProjectDir)\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -112,7 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;$(ProjectDir)\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;$(ProjectDir)\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,7 +150,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Includes;..\Includes\Core;$(ProjectDir)\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,13 +163,25 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DemoLevel.cpp" />
+    <ClCompile Include="Actor\Box.cpp" />
+    <ClCompile Include="Demo\DemoLevel.cpp" />
+    <ClCompile Include="Actor\Ground.cpp" />
+    <ClCompile Include="Level\SokobanLevel.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TestActor.cpp" />
+    <ClCompile Include="Demo\TestActor.cpp" />
+    <ClCompile Include="Actor\Player.cpp" />
+    <ClCompile Include="Actor\Wall.cpp" />
+    <ClCompile Include="Actor\Target.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DemoLevel.h" />
-    <ClInclude Include="TestActor.h" />
+    <ClInclude Include="Actor\Box.h" />
+    <ClInclude Include="Demo\DemoLevel.h" />
+    <ClInclude Include="Demo\TestActor.h" />
+    <ClInclude Include="Actor\Ground.h" />
+    <ClInclude Include="Level\SokobanLevel.h" />
+    <ClInclude Include="Actor\Player.h" />
+    <ClInclude Include="Actor\Wall.h" />
+    <ClInclude Include="Actor\Target.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

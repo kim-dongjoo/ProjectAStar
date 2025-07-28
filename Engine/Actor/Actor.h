@@ -21,10 +21,11 @@ enum class Color : int
 
 class Engine_API Actor : public RTTI
 {
+	friend class Level;
 	RTTI_DECLARATIONS(Actor, RTTI)
 
 public:
-	Actor(const char image = ' ', Color color = Color::White);
+	Actor(const char image = ' ', Color color = Color::White, const Vector2& position = Vector2::Zero);
 	virtual ~Actor();
 
 	// 이벤트 함수
@@ -39,6 +40,9 @@ public:
 	void SetPosition(const Vector2& newPosition);
 	Vector2 GetPosition() const;
 
+	// Render Sorting Order 설정
+	void SetRenderSortingOrder(unsigned int renderSortingOrder);
+
 private:
 	Vector2 position;
 
@@ -50,6 +54,9 @@ private:
 
 	// BeginPlay가 호출 되었는지 확인
 	bool hasBeganPlay = false;
+
+	// 렌더 정렬 순서
+	unsigned int renderSortingOrder = 0;
 
 };
 
