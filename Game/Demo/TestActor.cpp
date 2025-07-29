@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Engine.h"
 #include <Windows.h>
+#include "Input.h"
 
 TestActor::TestActor() : super('P', Color::Blue)
 {
@@ -17,28 +18,28 @@ void TestActor::Tick(float deltaTime)
 	//	<< (1.0f / deltaTime)
 	//	<< std::endl;
 
-	if (Engine::GetEngine().GetKey(VK_RIGHT) && GetPosition().x < 30)
+	if (Input::GetInput().GetKey(VK_RIGHT) && GetPosition().x < 30)
 	{
 		Vector2 position = GetPosition();
 		position.x += 1;
 		SetPosition(position);
 	}
 
-	if (Engine::GetEngine().GetKey(VK_LEFT) && GetPosition().x > 0)
+	if (Input::GetInput().GetKey(VK_LEFT) && GetPosition().x > 0)
 	{
 		Vector2 position = GetPosition();
 		position.x -= 1;
 		SetPosition(position);
 	}
 
-	if (Engine::GetEngine().GetKey(VK_UP) && GetPosition().y > 0)
+	if (Input::GetInput().GetKey(VK_UP) && GetPosition().y > 0)
 	{
 		Vector2 position = GetPosition();
 		position.y -= 1;
 		SetPosition(position);
 	}
 
-	if (Engine::GetEngine().GetKey(VK_DOWN) && GetPosition().y < 30)
+	if (Input::GetInput().GetKey(VK_DOWN) && GetPosition().y < 30)
 	{
 		Vector2 position = GetPosition();
 		position.y += 1;
@@ -47,7 +48,7 @@ void TestActor::Tick(float deltaTime)
 
 
 
-	if (Engine::GetEngine().GetKeyDown(VK_ESCAPE))
+	if (Input::GetInput().GetKeyDown(VK_ESCAPE))
 	{
 		Engine::GetEngine().Quit();
 	}
