@@ -12,7 +12,7 @@ class Engine_API Level : public RTTI
 
 public:
 	Level();
-	~Level();
+	virtual ~Level();
 
 	void SpawnActor(Actor* newActor);
 
@@ -24,7 +24,7 @@ public:
 private:
 	void SortActorsByRenderSortingOrder();
 
-private:
+protected:
 	std::vector<Actor*> actors;
 
 

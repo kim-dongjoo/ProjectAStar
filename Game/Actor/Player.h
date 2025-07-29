@@ -9,6 +9,11 @@ class Player : public Actor
 public:
 	Player(const Vector2& position);
 
+
+	virtual void BeginPlay() override;
 	virtual void Tick(float deltaTime) override;
+
+private:
+	class ICanPlayerMove* canPlayerMoveInterface = nullptr;
 
 };

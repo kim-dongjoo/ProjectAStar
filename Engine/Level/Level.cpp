@@ -24,7 +24,12 @@ Level::~Level()
 
 void Level::SpawnActor(Actor* newActor)
 {
+	// TODO : 중복 여부 예외 처리
+
 	actors.push_back(newActor);
+
+	// 오너십 설정.
+	newActor->SetOwner(this);
 }
 
 // 엔진 이벤트 함수

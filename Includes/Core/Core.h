@@ -25,3 +25,14 @@ void SafeDelete(T& target)
 		target = nullptr;
 	}
 }
+
+// 메모리 정리 함수
+template<typename T>
+void SafeDeleteArray(T& target)
+{
+	if (target)
+	{
+		delete[] target;
+		target = nullptr;
+	}
+}

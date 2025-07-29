@@ -7,10 +7,25 @@
 #include "Actor/Ground.h"
 #include "Actor/Box.h"
 #include "Actor/Target.h"
+#include "Utils/Utils.h"
 
 SokobanLevel::SokobanLevel()
 {
-	ReadMapFile("Map.txt");
+	ReadMapFile("Stage1.txt");
+}
+
+void SokobanLevel::Render()
+{
+	super::Render();
+
+	if (isGameClear)
+	{
+		Utils::SetConsolePosition({ 30, 0 });
+		Utils::SetConsoleTextColor(static_cast<WORD>(Color::White));
+
+		std::cout << "==== Game Clear! ====";
+	}
+
 }
 
 void SokobanLevel::ReadMapFile(const char* filename)
@@ -20,7 +35,7 @@ void SokobanLevel::ReadMapFile(const char* filename)
 	sprintf_s(filepath, 256, "../Contents/%s", filename);
 
 	FILE* file = nullptr;
-	fopen_s(&file, filepath, "rb");
+	fopen_s(&file, filepath, "rt");
 
 	// 예외 처리
 	if (file == nullptr)
@@ -75,6 +90,7 @@ void SokobanLevel::ReadMapFile(const char* filename)
 		switch (mapCharacter)
 		{
 		case '#':
+		case '1':
 			SpawnActor(new Wall(position));
 			// std::cout << "#";
 			break;
@@ -96,6 +112,7 @@ void SokobanLevel::ReadMapFile(const char* filename)
 			break;
 		case 't':
 			SpawnActor(new Target(position));
+			targetScore++;
 			// std::cout << "t";
 			break;
 		}
@@ -110,4 +127,149 @@ void SokobanLevel::ReadMapFile(const char* filename)
 	// 파일 닫기
 	fclose(file);
 
+}
+
+bool SokobanLevel::CheckGameClear()
+{
+	//  박스가 타겟 위치에 모두 옮겨졌는지 확인
+	int currentScore = 0;
+
+	// 타겟 액터 벡터에 저장
+	std::vector<Actor*> targetActors;
+	std::vector<Actor*> boxActors;
+
+	for (Actor* const actor : actors)
+	{
+		// 타겟 액터인지 확인
+		if (actor->As<Target>())
+		{
+			targetActors.emplace_back(actor);
+			continue;
+		}
+
+		// 박스 액터인지 확인
+		if (actor->As<Box>())
+		{
+			boxActors.emplace_back(actor);
+		}
+	}
+
+	// 박스와 타겟 위치 비교
+	for (Actor* const targetActor : targetActors)
+	{
+		for (Actor* const boxActor : boxActors)
+		{
+			if (targetActor->GetPosition() == boxActor->GetPosition())
+			{
+				// 점수 증가
+				++currentScore;
+			}
+		}
+	}
+
+
+	return currentScore == targetScore;
+
+
+
+	return false;
+}
+
+bool SokobanLevel::CanPlayerMove(const Vector2& playerPosition, const Vector2& newPosition)
+{
+	// 게임 클리어 여부 확인 및 종료 처리
+	if (isGameClear)
+	{
+		return false;
+	}
+
+	// 박스 처리
+	std::vector<Box*> boxActors;
+	for (Actor* const actor : actors)
+	{
+		Box* box = actor->As<Box>();
+		if (box)
+		{
+			boxActors.emplace_back(box);
+		}
+	}
+
+	// 이동하려는 위치에 박스가 있는지 확인
+	Box* searchedBox = nullptr;
+	for (Box* const boxActor : boxActors)
+	{
+		// 플레이어가 이동하려는 위치와 박스의 위치가 같은지 비교
+		if (boxActor->GetPosition() == newPosition)
+		{
+			// 같은 위치에 있는 박스 저장 후 루프 종료
+			searchedBox = boxActor;
+			break;
+		}
+	}
+
+	// 이동하려는 위치에 박스가 있는 경우 처리
+	if (searchedBox)
+	{
+		// 1. 박스를 이동시키려는 위치에 다른 박스가 있는지 확인.
+		Vector2 direction = newPosition - playerPosition;
+		Vector2 nextPosition = searchedBox->GetPosition() + direction;
+
+		for (Box* const otherBox : boxActors)
+		{
+			// 같은 박스는 건너뛰기
+			if (otherBox == searchedBox)
+				continue;
+
+			if (otherBox->GetPosition() == nextPosition)
+			{
+				// 플레이어 이동 못함
+				return false;
+			}
+		}
+
+		for (Actor* const actor : actors)
+		{
+			if (actor->GetPosition() == nextPosition)
+			{
+				// 2. 박스를 이동시키려는 위치에 벽이 있는지 확인
+
+				if (actor->As<Wall>())
+				{
+					// 플레이어 이동 못함
+					return false;
+				}
+
+				// 3. 이동 가능한 경우(그라운드/타겟) 이동처리
+				if (actor->As<Ground>() || actor->As<Target>())
+				{
+					// 박스 이동 처리
+					searchedBox->SetPosition(nextPosition);
+
+					// 게임 클리어 여부 확인
+					isGameClear = CheckGameClear();
+
+					// 플레이어 이동 가능
+						return true;
+				}
+			}
+		}
+	}
+
+	// 플레이어가 이동하려는 위치에 박스가 없는 경우
+	for (Actor* const actor : actors)
+	{
+		if (actor->GetPosition() == newPosition)
+		{
+			// 벽이면 이동 불가
+			if (actor->As<Wall>())
+			{
+				return false;
+			}
+
+			// 그라운드 or 타겟
+			return true;
+		}
+	}
+
+	return false;
 }
