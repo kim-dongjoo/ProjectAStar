@@ -171,30 +171,27 @@ xcopy $(SolutionDir)\Contents $(OutDir)..\Contents\ /y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor\Box.cpp" />
+    <ClCompile Include="AStar\AStar.cpp" />
+    <ClCompile Include="Actor\LevelGrid.cpp" />
+    <ClCompile Include="Level\AStarLevel.cpp" />
     <ClCompile Include="Demo\DemoLevel.cpp" />
-    <ClCompile Include="Actor\Ground.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Level\MenuLevel.cpp" />
-    <ClCompile Include="Level\SokobanLevel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Demo\TestActor.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
-    <ClCompile Include="Actor\Wall.cpp" />
-    <ClCompile Include="Actor\Target.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor\Box.h" />
+    <ClInclude Include="AStar\AStar.h" />
+    <ClInclude Include="AStar\Node.h" />
+    <ClInclude Include="Actor\LevelGrid.h" />
+    <ClInclude Include="Level\AStarLevel.h" />
     <ClInclude Include="Demo\DemoLevel.h" />
     <ClInclude Include="Demo\TestActor.h" />
-    <ClInclude Include="Actor\Ground.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Level\MenuLevel.h" />
     <ClInclude Include="Interface\ICanPlayerMove.h" />
-    <ClInclude Include="Level\SokobanLevel.h" />
     <ClInclude Include="Actor\Player.h" />
-    <ClInclude Include="Actor\Wall.h" />
-    <ClInclude Include="Actor\Target.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

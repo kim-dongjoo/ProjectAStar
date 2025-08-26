@@ -2,7 +2,6 @@
 #include "Engine.h"
 #include "Game/Game.h"
 // #include "Demo/DemoLevel.h"
-#include "Level/SokobanLevel.h"
 #include "Level/MenuLevel.h"
 
 int main()
@@ -11,10 +10,8 @@ int main()
 
 	//_CrtSetBreakAlloc(321);
 
-	Game sokobanGame;
+	Game game;
 	// Engine engine;
 	// engine.AddLevel(new DemoLevel());
-	// sokobanGame.AddLevel(new MenuLevel());
-	// sokobanGame.AddLevel(new SokobanLevel());
-	sokobanGame.Run();
+	game.Run();
 }

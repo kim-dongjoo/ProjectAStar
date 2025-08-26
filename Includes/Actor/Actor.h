@@ -52,7 +52,7 @@ public:
 	// 게임 종료 요청 함수
 	void QuitGame();
 
-private:
+protected:
 	Vector2 position;
 
 	// 그릴 값
