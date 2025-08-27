@@ -5,10 +5,6 @@
 #include "RTTI.h"
 #include <Windows.h>
 
-// 위치
-// 그리기
-// 엔진의 이벤트 함수 호출(BeginPlay/Tick/Draw)
-
 // 색상
 enum class Color : int
 {
@@ -71,4 +67,3 @@ protected:
 	Level* owner = nullptr;
 
 };
-

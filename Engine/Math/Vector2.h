@@ -31,4 +31,3 @@ private:
 	char* value = nullptr;
 
 };
-

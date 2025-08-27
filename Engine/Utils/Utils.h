@@ -33,6 +33,6 @@ namespace Utils
 		{
 			static HANDLE handle = GetConsoleHandle();
 			SetConsoleTextAttribute(handle, color);
-		} }
+		}
+	}
 }
-

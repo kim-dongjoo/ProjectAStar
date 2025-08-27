@@ -101,7 +101,5 @@ void Level::SortActorsByRenderSortingOrder()
 				std::swap(actors[jdx], actors[jdx + 1]);
 			}
 		}
-
-
 	}
 }

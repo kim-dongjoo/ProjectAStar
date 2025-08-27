@@ -12,7 +12,6 @@ Actor::~Actor()
 {
 }
 
-// 
 void Actor::BeginPlay()
 {
 	hasBeganPlay = true;
@@ -42,7 +41,6 @@ void Actor::Render()
 
 	// ±×¸®±â
 	std::cout << image;
-	
 }
 
 void Actor::SetPosition(const Vector2& newPosition)

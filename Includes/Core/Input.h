@@ -7,7 +7,6 @@ class Engine_API Input
 	// freend 선언
 	friend class Engine;
 
-
 	struct KeyState
 	{
 		// 현재 프레임에 키가 눌렸는지
@@ -23,8 +22,6 @@ public:
 	bool GetKey(int keyCode);
 	bool GetKeyDown(int keyCode);
 	bool GetKeyUp(int keyCode);
-
-
 
 	static Input& GetInput();
 

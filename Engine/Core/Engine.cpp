@@ -4,10 +4,6 @@
 #include <Windows.h>
 #include "Utils/Utils.h"
 
-// 윈도우즈
-// 단순 입력 처리(키보드)
-//
-
 Engine* Engine::instance = nullptr;
 
 BOOL WINAPI ConsoleMessageProcedure(DWORD CtrlType)
@@ -18,12 +14,9 @@ BOOL WINAPI ConsoleMessageProcedure(DWORD CtrlType)
 		//Engine의 메모리 해제
 		Engine::GetEngine().CleanUp();
 		return false;
-
-
 	}
 
 	return false;
-
 }
 
 Engine::Engine()
@@ -136,19 +129,6 @@ Engine& Engine::GetEngine()
 	return *instance;
 }
 
-//void Engine::ProcessInput()
-//{
-//	// 키 입력 확인
-//	for (int idx = 0; idx < 255; ++idx)
-//	{
-//		keyStates[idx].isKeyDown = GetAsyncKeyState(idx) & 0x8000;
-//	}
-//
-//	// ESC 키 눌림 확인
-//	// if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-//	//	Quit();
-//}
-
 void Engine::BeginPlay()
 {
 	if (mainLevel)
@@ -169,18 +149,11 @@ void Engine::Tick(float deltaTime)
 	{
 		mainLevel->Tick(deltaTime);
 	}
-
-	// if (GetKeyDown(VK_ESCAPE)) { Quit(); }
 }
 
 void Engine::Render()
 {
 	Utils::SetConsoleTextColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-
-	/*SetConsoleTextAttribute(
-		GetStdHandle(STD_OUTPUT_HANDLE),
-		FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE
-	);*/
 
 	if (mainLevel)
 	{
@@ -253,7 +226,5 @@ void Engine::LoadEngineSettings()
 
 	// 파일 닫기
 	fclose(file);
-
-
 
 }

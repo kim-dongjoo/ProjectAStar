@@ -35,8 +35,6 @@ public:
 	// 레벨 추가 함수
 	void AddLevel(Level* newLevel);
 
-
-
 	// 메모리 해체 함수
 	virtual void CleanUp();
 
@@ -71,4 +69,3 @@ protected:
 	static Engine* instance;
 
 };
-

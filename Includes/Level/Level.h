@@ -26,7 +26,4 @@ private:
 
 protected:
 	std::vector<Actor*> actors;
-
-
 };
-
