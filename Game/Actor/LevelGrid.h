@@ -23,6 +23,11 @@ class LevelGrid : public Actor
 		this->type = type;
 	}
 
+	void SetImage(const char image)
+	{
+		this->image = image;
+	}
+
 private:
 	GridType type = GridType::Ground;
 };

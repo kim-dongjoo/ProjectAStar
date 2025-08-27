@@ -24,8 +24,6 @@ Level::~Level()
 
 void Level::SpawnActor(Actor* newActor)
 {
-	// TODO : 중복 여부 예외 처리
-
 	actors.push_back(newActor);
 
 	// 오너십 설정.
@@ -94,7 +92,7 @@ void Level::SortActorsByRenderSortingOrder()
 {
 	for (int idx = 0; idx < (int)actors.size(); ++idx)
 	{
-		for (int jdx = 0; jdx < (int)actors.size() - 1; ++jdx)
+		for (int jdx = 0; jdx < (int)actors.size() - 1 - idx; ++jdx)
 		{
 			if (actors[jdx]->renderSortingOrder > actors[jdx + 1]->renderSortingOrder)
 			{

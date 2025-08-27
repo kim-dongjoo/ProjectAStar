@@ -26,6 +26,17 @@ AStar::~AStar()
 
 std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, vector<vector<LevelGrid>>& grids)
 {
+	// 재실행이라면 리스트 초기화
+	if (!openList.empty())
+	{
+		openList.clear();
+	}
+
+	if (!closedList.empty())
+	{
+		closedList.clear();
+	}
+
 	// 시작 노드 / 목표 노드 저장
 	this->startNode = startNode;
 	this->goalNode = goalNode;
@@ -113,8 +124,6 @@ std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, vector<vecto
 				continue;
 			}
 
-			// (옵션) 장애물인지 확인
-			// 값이 1이면 장애물이라고 약속
 			if (grids[newY][newX].GetType() == GridType::Wall)
 			{
 				continue;
@@ -264,45 +273,7 @@ void AStar::DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, cons
 	SetConsoleCursorPosition(handle, position);
 
 	int white = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-	int green = FOREGROUND_GREEN;
-
-	// 구분을 위해 설정했던 데이터 초기화.
-	for (int y = 0; y < grids.size(); ++y)
-	{
-		for (int x = 0; x < grids[0].size(); ++x)
-		{
-			GridType type = grids[y][x].GetType();
-			// 2, 3, 5 
-			if (type == GridType::Start || type == GridType::Goal || type == GridType::Path)
-			{
-				grids[y][x].SetType(GridType::Goal);
-			}
-		}
-	}
-
-	//// 경로를 제외한 맵 출력.
-	//for (int y = 0; y < grids.size(); ++y)
-	//{
-	//	for (int x = 0; x < grids[0].size(); ++x)
-	//	{
-	//		// 장애물.
-	//		if (grids[y][x].GetType() == GridType::Wall)
-	//		{
-	//			SetConsoleTextAttribute(handle, white);
-	//			std::cout << "1";
-	//		}
-
-
-	//		// 빈 공간.
-	//		else if (grids[y][x].GetType() == GridType::Ground)
-	//		{
-	//			SetConsoleTextAttribute(handle, white);
-	//			std::cout << " ";
-	//		}
-	//	}
-
-	//	std::cout << "\n";
-	//}
+	int bluegreen = FOREGROUND_GREEN | FOREGROUND_BLUE;
 
 	// 경로 출력.
 	for (const Node* node : path)
@@ -310,11 +281,25 @@ void AStar::DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, cons
 		// 경로는 '2'로 표시.
 		COORD position{ static_cast<short>(node->GetPosition().x), static_cast<short>(node->GetPosition().y)};
 		SetConsoleCursorPosition(handle, position);
-		SetConsoleTextAttribute(handle, FOREGROUND_BLUE);
+		SetConsoleTextAttribute(handle, bluegreen);
 
 		std::cout << "+";
 		int delay = static_cast<int>(0.05f * 1000);
 		Sleep(delay);
+	}
+
+	// 경로를 지면으로 초기화.
+	for (int y = 0; y < grids.size(); ++y)
+	{
+		for (int x = 0; x < grids[0].size(); ++x)
+		{
+			GridType type = grids[y][x].GetType();
+			// 2, 3, 5 
+			if (type == GridType::Path)
+			{
+				grids[y][x].SetType(GridType::Ground);
+			}
+		}
 	}
 }
 
@@ -325,46 +310,47 @@ void AStar::DisplayGrid(std::vector<std::vector<LevelGrid>>& grids)
 	SetConsoleCursorPosition(handle, position);
 
 	int white = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
-	int green = FOREGROUND_GREEN;
 
 	for (int y = 0; y < grids.size(); ++y)
 	{
 		for (int x = 0; x < grids[0].size(); ++x)
 		{
 			// 시작 위치.
-			if (grids[y][x].GetType() == GridType::Start)
+			/*if (grids[y][x].GetType() == GridType::Start)
 			{
-				SetConsoleTextAttribute(handle, FOREGROUND_RED);
+				SetConsoleTextAttribute(handle, FOREGROUND_GREEN);
 				std::cout << "S";
-			}
+			}*/
 
 			// 목표 위치.
-			if (grids[y][x].GetType() == GridType::Goal)
+			/*if (grids[y][x].GetType() == GridType::Goal)
 			{
 				SetConsoleTextAttribute(handle, FOREGROUND_RED);
 				std::cout << "G";
-			}
+			}*/
 
 			// 장애물.
-			if (grids[y][x].GetType() == GridType::Wall)
+			/*if (grids[y][x].GetType() == GridType::Wall)
 			{
 				SetConsoleTextAttribute(handle, white);
 				std::cout << "1";
-			}
+			}*/
 
 			// 경로.
-			else if (grids[y][x].GetType() == GridType::Path)
+			if (grids[y][x].GetType() == GridType::Path)
 			{
-				SetConsoleTextAttribute(handle, green);
+				position = { static_cast<short>(x), static_cast<short>(y) };
+				SetConsoleCursorPosition(handle, position);
+				SetConsoleTextAttribute(handle, FOREGROUND_BLUE);
 				std::cout << "+";
 			}
 
 			// 빈 공간.
-			else if (grids[y][x].GetType() == GridType::Ground)
+			/*else if (grids[y][x].GetType() == GridType::Ground)
 			{
 				SetConsoleTextAttribute(handle, white);
 				std::cout << " ";
-			}
+			}*/
 		}
 
 		std::cout << "\n";

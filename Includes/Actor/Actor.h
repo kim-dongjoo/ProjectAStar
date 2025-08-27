@@ -34,11 +34,18 @@ public:
 	// BeginPlay 호출 여부 확인
 	inline bool HasBeganPlay() const { return hasBeganPlay; }
 
+	// =========== //
+	// Getter/Setter   //
+	// =========== //
 	// 위치 설정/값 읽는 함수
 	void SetPosition(const Vector2& newPosition);
 	Vector2 GetPosition() const;
 
+	Color GetColor() const { return color; }
+	void SetColor(Color newColor) { color = newColor; }
+
 	// Render Sorting Order 설정
+	unsigned int GetRenderSortingOrder() const { return renderSortingOrder; }
 	void SetRenderSortingOrder(unsigned int renderSortingOrder);
 
 	// 오너십 설정

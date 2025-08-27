@@ -58,6 +58,7 @@ void Player::Tick(float deltaTime)
 			Vector2 position = GetPosition();
 			position.x += 1;
 			SetPosition(position);
+			return;
 		}
 	}
 	if (Input::GetInput().GetKeyDown(VK_LEFT))
@@ -69,6 +70,7 @@ void Player::Tick(float deltaTime)
 			Vector2 position = GetPosition();
 			position.x -= 1;
 			SetPosition(position);
+			return;
 		}
 	}
 	if (Input::GetInput().GetKeyDown(VK_UP))
@@ -78,6 +80,7 @@ void Player::Tick(float deltaTime)
 			Vector2 position = GetPosition();
 			position.y -= 1;
 			SetPosition(position);
+			return;
 		}
 	}
 	if (Input::GetInput().GetKeyDown(VK_DOWN))
@@ -87,6 +90,7 @@ void Player::Tick(float deltaTime)
 			Vector2 position = GetPosition();
 			position.y += 1;
 			SetPosition(position);
+			return;
 		}
 	}
 
@@ -100,18 +104,30 @@ void Player::Tick(float deltaTime)
 	if (Input::GetInput().GetKeyDown(0x53))
 	{
 		// TODO : 시작 위치 생성하는 함수
+		AStarLevel* level = GetOwner()->As<AStarLevel>();
+		level->ModifyGrid(GetPosition(), GridType::Start);
+
+		return;
 	}
 
 	// G키
 	if (Input::GetInput().GetKeyDown(0x47))
 	{
 		// TODO : 목표 위치 생성하는 함수
+		AStarLevel* level = GetOwner()->As<AStarLevel>();
+		level->ModifyGrid(GetPosition(), GridType::Goal);
+
+		return;
 	}
 
 	// W키
 	if (Input::GetInput().GetKeyDown(0x57))
 	{
 		// TODO : 장애물 생성하는 함수
+		AStarLevel* level = GetOwner()->As<AStarLevel>();
+		level->ModifyGrid(GetPosition(), GridType::Wall);
+
+		return;
 	}
 
 	// 스페이스 키
@@ -120,7 +136,7 @@ void Player::Tick(float deltaTime)
 		// TODO : A-star 알고리즘을 통한 이동 시작
 		AStarLevel* level = GetOwner()->As<AStarLevel>();
 		level->StartAStar();
+
+		return;
 	}
-
-
 }

@@ -18,14 +18,17 @@ void AStarLevel::Render()
 {
 	super::Render();
 
-	if (isGameClear)
+	// Render Pass
+	int width = grids[0].size();
+	int height = grids.size();
+
+	for (int y = 0; y < height; y++)
 	{
-		Utils::SetConsolePosition({ 30, 0 });
-		Utils::SetConsoleTextColor(static_cast<WORD>(Color::White));
-
-		std::cout << "==== Game Clear! ====";
+		for (int x = 0; x < width; x++)
+		{
+			grids[y][x].Render();
+		}
 	}
-
 }
 
 void AStarLevel::ReadMapFile(const char* filename)
@@ -54,7 +57,7 @@ void AStarLevel::ReadMapFile(const char* filename)
 	char* buffer = new char[fileSize + 1];
 	// memset(buffer, 0, fileSize + 1);
 	size_t readSize = fread(buffer, sizeof(char), fileSize, file);
-	buffer[fileSize] = '\0';
+	//buffer[fileSize] = '\0';
 
 	if (fileSize != readSize)
 	{
@@ -80,7 +83,8 @@ void AStarLevel::ReadMapFile(const char* filename)
 	while (index < size)
 	{
 		// 맵 문자 확인
-		char mapCharacter = buffer[index++];
+		char mapCharacter = buffer[index];
+		index++;
 
 		// 개행 문자 처리
 		if (mapCharacter == '\n')
@@ -92,8 +96,6 @@ void AStarLevel::ReadMapFile(const char* filename)
 			++position.y;
 			position.x = 0;
 
-			// 테스트 코드
-			std::cout << std::endl;
 			continue;
 		}
 
@@ -104,17 +106,14 @@ void AStarLevel::ReadMapFile(const char* filename)
 		case '1':
 			grid = new LevelGrid(position, '1', Color::White, GridType::Wall);
 			row.push_back(*grid);
-			SpawnActor(grid);
 			break;
 		case ' ':
 			grid = new LevelGrid(position, ' ', Color::White, GridType::Ground);
 			row.push_back(*grid);
-			SpawnActor(grid);
 			break;
 		case '*':
 			grid = new LevelGrid(position, ' ', Color::White, GridType::Ground);
 			row.push_back(*grid);
-			SpawnActor(grid);
 
 			// 플레이어(*)도 스폰
 			SpawnActor(new Player(position));
@@ -124,16 +123,16 @@ void AStarLevel::ReadMapFile(const char* filename)
 			startNode = new Node(position.x, position.y);
 
 			grid = new LevelGrid(position, 'S', Color::Green, GridType::Start);
+			grid->SetRenderSortingOrder(5);
 			row.push_back(*grid);
-			SpawnActor(grid);
 			break;
 		case 'G':
 			// 목표 노드 값 설정
 			goalNode = new Node(position.x, position.y);
 
 			grid = new LevelGrid(position, 'G', Color::Red, GridType::Goal);
+			grid->SetRenderSortingOrder(5);
 			row.push_back(*grid);
-			SpawnActor(grid);
 			break;
 		}
 
@@ -174,12 +173,77 @@ bool AStarLevel::CanPlayerMove(const Vector2& playerPosition, const Vector2& new
 	return true;
 }
 
-void AStarLevel::UpdateStartPosition(Vector2 position)
+void AStarLevel::ModifyGrid(Vector2 position, GridType type)
 {
-}
+	// 1. 시작 위치 생성 및 기존 시작 위치 삭제
+	if (type == GridType::Start)
+	{
+		if (grids[position.y][position.x].GetType() == GridType::Wall || grids[position.y][position.x].GetType() == GridType::Goal)
+		{
+			// 현재 위치를 시작점으로 할 수 없습니다.
+			std::cout << "현재 위치를 시작점으로 할 수 없습니다.";
+		}
+		else if (grids[position.y][position.x].GetType() == GridType::Ground)
+		{
+			// 기존 시작 위치 삭제
+			Vector2 prevPosition = startNode->GetPosition();
+			grids[prevPosition.y][prevPosition.x].SetType(GridType::Ground);
+			grids[prevPosition.y][prevPosition.x].SetImage(' ');
+			grids[prevPosition.y][prevPosition.x].SetColor(Color::White);
+			delete startNode;
 
-void AStarLevel::UpdateGoalPosition(Vector2 position)
-{
+			// 새로운 시작점 적용
+			grids[position.y][position.x].SetType(GridType::Start);
+			grids[position.y][position.x].SetImage('S');
+			grids[position.y][position.x].SetColor(Color::Green);
+			startNode = new Node(position.x, position.y);
+		}
+	}
+
+	// 2. 목표 위치 생성 및 기존 목표 위치 삭제
+	if (type == GridType::Goal)
+	{
+		if (grids[position.y][position.x].GetType() == GridType::Wall || grids[position.y][position.x].GetType() == GridType::Start)
+		{
+			// 현재 위치를 목표 지점으로 할 수 없습니다.
+			std::cout << "현재 위치를 목표 지점으로 할 수 없습니다.";
+		}
+		else if (grids[position.y][position.x].GetType() == GridType::Ground)
+		{
+			// 기존 시작 위치 삭제
+			Vector2 prevPosition = goalNode->GetPosition();
+			grids[prevPosition.y][prevPosition.x].SetType(GridType::Ground);
+			grids[prevPosition.y][prevPosition.x].SetImage(' ');
+			grids[prevPosition.y][prevPosition.x].SetColor(Color::White);
+			delete goalNode;
+
+			// 새로운 시작점 적용
+			grids[position.y][position.x].SetType(GridType::Goal);
+			grids[position.y][position.x].SetImage('G');
+			grids[position.y][position.x].SetColor(Color::Red);
+			goalNode = new Node(position.x, position.y);
+		}
+	}
+
+	// 3 장애물 생성 또는 제거 
+	if (type == GridType::Wall)
+	{
+		if (grids[position.y][position.x].GetType() == GridType::Start || grids[position.y][position.x].GetType() == GridType::Goal)
+		{
+			// 시작 위치나 목표 위치에는 장애물을 설치할 수 없습니다.
+			std::cout << "시작 위치나 목표 위치에는 장애물을 설치할 수 없습니다.";
+		}
+		else if (grids[position.y][position.x].GetType() == GridType::Ground) // Ground -> Wall
+		{
+			grids[position.y][position.x].SetType(GridType::Wall);
+			grids[position.y][position.x].SetImage('1');
+		}
+		else if (grids[position.y][position.x].GetType() == GridType::Wall) // Wall -> Ground
+		{
+			grids[position.y][position.x].SetType(GridType::Ground);
+			grids[position.y][position.x].SetImage(' ');
+		}
+	}
 }
 
 void AStarLevel::StartAStar()

@@ -18,22 +18,14 @@ public:
 	// ICanPlayerMove을(를) 통해 상속됨
 	virtual bool CanPlayerMove(const Vector2& playerPosition, const Vector2& newPosition) override;
 
-
-
-	// 시작 위치 업데이트
-	void UpdateStartPosition(Vector2 position);
-
-	// 목표 위치 업데이트
-	void UpdateGoalPosition(Vector2 position);
+	// 그리드 변경
+	void ModifyGrid(Vector2 position, GridType type);
 
 	// A-star 알고리즘을 통한 이동 시작
 	void StartAStar();
 
 private:
 	void ReadMapFile(const char* filename);
-
-	//  게임 클리어 확인하는 함수
-	bool CheckGameClear();
 
 private:
 	// =======================
