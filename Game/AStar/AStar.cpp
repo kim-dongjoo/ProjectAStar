@@ -113,11 +113,10 @@ std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, vector<vecto
 		// 이웃 노드 방문
 		for (const Direction& direction : directions)
 		{
-			// 다음에 이동하 ㄹ위치 설정
+			// 다음에 이동할 위치 설정
 			int newX = currentNode->GetPosition().x + direction.x;
 			int newY = currentNode->GetPosition().y + direction.y;
 
-			// TODO : 그리드 밖인지 확인
 			if (!IsInRange(newX, newY, grids))
 			{
 				// /그리드 밖이면 무시.
@@ -160,8 +159,9 @@ std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, vector<vecto
 				openListNode->gCost > neighborNode->gCost ||
 				openListNode->fCost > neighborNode->fCost)
 			{
-				// 방문할 노드를 특정 값으로 설정
-				grids[newY][newX].SetType(GridType::Path);
+				// 방문할 그리드를 Path로 설정
+				if(grids[newY][newX].GetType() !=  GridType::Goal)
+					grids[newY][newX].SetType(GridType::Path);
 
 				openList.emplace_back(neighborNode);
 			}
@@ -171,7 +171,7 @@ std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, vector<vecto
 			}
 
 			// 딜레이
-			DisplayGrid(grids);
+			DisplayPathSearch(grids);
 			int delay = (int)(0.1f * 1000);
 			Sleep(delay * 0.3);
 		}
@@ -182,9 +182,6 @@ std::vector<Node*> AStar::FindPath(Node* startNode, Node* goalNode, vector<vecto
 
 std::vector<Node*> AStar::ConstructPath(Node* goalNode)
 {
-	// TODO : 경로 반환하는 함수 로직 구현해야 함.
-
-
 	vector<Node*> path;
 	Node* currentNode = goalNode;
 	while (currentNode != nullptr)
@@ -266,7 +263,7 @@ float AStar::CalculateHeuristic(Node* currentNode, Node* goalNode)
 	return (float)sqrt(diff.x * diff.x + diff.y * diff.y);
 }
 
-void AStar::DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, const std::vector<Node*>& path)
+void AStar::DisplayConstructedPath(std::vector<std::vector<LevelGrid>>& grids, const std::vector<Node*>& path)
 {
 	static COORD position = { 0, 0 };
 	static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -278,7 +275,7 @@ void AStar::DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, cons
 	// 경로 출력.
 	for (const Node* node : path)
 	{
-		// 경로는 '2'로 표시.
+		// 경로는 '+'로 표시.
 		COORD position{ static_cast<short>(node->GetPosition().x), static_cast<short>(node->GetPosition().y)};
 		SetConsoleCursorPosition(handle, position);
 		SetConsoleTextAttribute(handle, bluegreen);
@@ -294,7 +291,7 @@ void AStar::DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, cons
 		for (int x = 0; x < grids[0].size(); ++x)
 		{
 			GridType type = grids[y][x].GetType();
-			// 2, 3, 5 
+			
 			if (type == GridType::Path)
 			{
 				grids[y][x].SetType(GridType::Ground);
@@ -303,7 +300,7 @@ void AStar::DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, cons
 	}
 }
 
-void AStar::DisplayGrid(std::vector<std::vector<LevelGrid>>& grids)
+void AStar::DisplayPathSearch(std::vector<std::vector<LevelGrid>>& grids)
 {
 	static COORD position = { 0, 0 };
 	static HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -315,27 +312,6 @@ void AStar::DisplayGrid(std::vector<std::vector<LevelGrid>>& grids)
 	{
 		for (int x = 0; x < grids[0].size(); ++x)
 		{
-			// 시작 위치.
-			/*if (grids[y][x].GetType() == GridType::Start)
-			{
-				SetConsoleTextAttribute(handle, FOREGROUND_GREEN);
-				std::cout << "S";
-			}*/
-
-			// 목표 위치.
-			/*if (grids[y][x].GetType() == GridType::Goal)
-			{
-				SetConsoleTextAttribute(handle, FOREGROUND_RED);
-				std::cout << "G";
-			}*/
-
-			// 장애물.
-			/*if (grids[y][x].GetType() == GridType::Wall)
-			{
-				SetConsoleTextAttribute(handle, white);
-				std::cout << "1";
-			}*/
-
 			// 경로.
 			if (grids[y][x].GetType() == GridType::Path)
 			{
@@ -344,15 +320,23 @@ void AStar::DisplayGrid(std::vector<std::vector<LevelGrid>>& grids)
 				SetConsoleTextAttribute(handle, FOREGROUND_BLUE);
 				std::cout << "+";
 			}
-
-			// 빈 공간.
-			/*else if (grids[y][x].GetType() == GridType::Ground)
-			{
-				SetConsoleTextAttribute(handle, white);
-				std::cout << " ";
-			}*/
 		}
+	}
+}
 
-		std::cout << "\n";
+void AStar::ClearPath(std::vector<std::vector<LevelGrid>>& grids)
+{
+	// 경로를 지면으로 초기화.
+	for (int y = 0; y < grids.size(); ++y)
+	{
+		for (int x = 0; x < grids[0].size(); ++x)
+		{
+			GridType type = grids[y][x].GetType();
+
+			if (type == GridType::Path)
+			{
+				grids[y][x].SetType(GridType::Ground);
+			}
+		}
 	}
 }

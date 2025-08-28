@@ -5,6 +5,7 @@
 #include "AStar/Node.h"
 #include "Actor/LevelGrid.h"
 #include "Interface//ICanPlayerMove.h"
+#include "Game/Message.h"
 
 class AStarLevel : public Level, public ICanPlayerMove
 {
@@ -12,6 +13,7 @@ class AStarLevel : public Level, public ICanPlayerMove
 
 public:
 	AStarLevel();
+	~AStarLevel();
 
 	virtual void Render() override;
 
@@ -28,16 +30,6 @@ private:
 	void ReadMapFile(const char* filename);
 
 private:
-	// =======================
-	// TODO : 추후 삭제 필요
-
-	// 게임 클리어를 위한 점수
-	int targetScore = 0;
-
-	// 게임 클리어 여부 확인 변수
-	bool isGameClear = false;
-	// =======================
-
 	// A* 객체
 	AStar aStar;
 
@@ -50,4 +42,7 @@ private:
 	// 시작 위치와 목표위치 노드.
 	Node* startNode = nullptr;
 	Node* goalNode = nullptr;
+
+	// 메시지
+	Message* msg;
 };

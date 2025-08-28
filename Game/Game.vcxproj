@@ -180,6 +180,7 @@ xcopy $(SolutionDir)\Contents $(OutDir)..\Contents\ /y</Command>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Demo\TestActor.cpp" />
     <ClCompile Include="Actor\Player.cpp" />
+    <ClCompile Include="Game\Message.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AStar\AStar.h" />
@@ -192,6 +193,7 @@ xcopy $(SolutionDir)\Contents $(OutDir)..\Contents\ /y</Command>
     <ClInclude Include="Level\MenuLevel.h" />
     <ClInclude Include="Interface\ICanPlayerMove.h" />
     <ClInclude Include="Actor\Player.h" />
+    <ClInclude Include="Game\Message.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

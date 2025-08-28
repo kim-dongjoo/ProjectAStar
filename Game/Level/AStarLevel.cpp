@@ -11,7 +11,14 @@
 
 AStarLevel::AStarLevel()
 {
+	msg = new Message();
+
 	ReadMapFile("Map.txt");
+}
+
+AStarLevel::~AStarLevel()
+{
+	delete msg;
 }
 
 void AStarLevel::Render()
@@ -153,11 +160,6 @@ void AStarLevel::ReadMapFile(const char* filename)
 
 bool AStarLevel::CanPlayerMove(const Vector2& playerPosition, const Vector2& newPosition)
 {
-	// 게임 클리어 여부 확인 및 종료 처리
-	if (isGameClear)
-	{
-		return false;
-	}
 
 	// 이동할 위치가 맵 벗어나는지 확인
 	if (newPosition.x > Size.x - 1 || newPosition.y > Size.y - 1)
@@ -181,7 +183,7 @@ void AStarLevel::ModifyGrid(Vector2 position, GridType type)
 		if (grids[position.y][position.x].GetType() == GridType::Wall || grids[position.y][position.x].GetType() == GridType::Goal)
 		{
 			// 현재 위치를 시작점으로 할 수 없습니다.
-			std::cout << "현재 위치를 시작점으로 할 수 없습니다.";
+			msg->ShowMessage("현재 위치를 시작점으로 할 수 없습니다.");
 		}
 		else if (grids[position.y][position.x].GetType() == GridType::Ground)
 		{
@@ -206,7 +208,7 @@ void AStarLevel::ModifyGrid(Vector2 position, GridType type)
 		if (grids[position.y][position.x].GetType() == GridType::Wall || grids[position.y][position.x].GetType() == GridType::Start)
 		{
 			// 현재 위치를 목표 지점으로 할 수 없습니다.
-			std::cout << "현재 위치를 목표 지점으로 할 수 없습니다.";
+			msg->ShowMessage("현재 위치를 목표 지점으로 할 수 없습니다.");
 		}
 		else if (grids[position.y][position.x].GetType() == GridType::Ground)
 		{
@@ -231,7 +233,7 @@ void AStarLevel::ModifyGrid(Vector2 position, GridType type)
 		if (grids[position.y][position.x].GetType() == GridType::Start || grids[position.y][position.x].GetType() == GridType::Goal)
 		{
 			// 시작 위치나 목표 위치에는 장애물을 설치할 수 없습니다.
-			std::cout << "시작 위치나 목표 위치에는 장애물을 설치할 수 없습니다.";
+			msg->ShowMessage("시작 위치나 목표 위치에는 장애물을 설치할 수 없습니다.");
 		}
 		else if (grids[position.y][position.x].GetType() == GridType::Ground) // Ground -> Wall
 		{
@@ -254,7 +256,10 @@ void AStarLevel::StartAStar()
 	if (!path.empty())
 	{
 		// 경로 탐색 결과 2차원 맵 출력.
-		std::cout << "경로를 맵에 표시한 결과:\n";
-		aStar.DisplayGridWithPath(grids, path);
+		aStar.DisplayConstructedPath(grids, path);
+	}
+	else
+	{
+		aStar.ClearPath(grids);
 	}
 }

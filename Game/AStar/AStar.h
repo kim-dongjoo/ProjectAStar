@@ -41,15 +41,16 @@ public:
 		vector<vector<LevelGrid>>& grids
 	);
 
-	// 경로 출력 함수
-	// 그리드 출력 함수.
-	void DisplayGridWithPath(std::vector<std::vector<LevelGrid>>& grids, const std::vector<Node*>& path);
+	// 완성된 경로 출력
+	void DisplayConstructedPath(std::vector<std::vector<LevelGrid>>& grids, const std::vector<Node*>& path);
 
-	void DisplayGrid(std::vector<std::vector<LevelGrid>>& grids);
+	// 경로 탐색 출력
+	void DisplayPathSearch(std::vector<std::vector<LevelGrid>>& grids);
+
+	// 경로 초기화(경로 탐색 실패 시 호출)
+	void ClearPath(std::vector<std::vector<LevelGrid>>& grids);
 
 private:
-
-
 	// 탐색을 마친 후에 경로를 조립해 반환하는 함수
 	// 목표 노드에서 부모 노드를 참조해 시작 노드까지 역추적하며 경로를 구함.
 	std::vector<Node*> ConstructPath(Node* goalNode);
